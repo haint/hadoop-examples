@@ -15,7 +15,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package hadoop.examples;
+package hadoop.examples.mapreduce;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -142,8 +142,10 @@ public class WordCountV2 extends Configured implements Tool
    		if("-skip".equals(args[i])) {
    			DistributedCache.addCacheFile(new Path(args[++i]).toUri(), conf);
    			conf.setBoolean("wordcount.skip.patterns", true);
-   		}
-   		other_args.add(args[i]);
+   		} else if("-D".equals(args[i])) {
+   			String[] arr = args[++i].split("=");
+   			conf.setBoolean(arr[0], Boolean.valueOf(arr[1]));
+   		} else other_args.add(args[i]);
    	}
    	
    	Job job = new Job(conf);
